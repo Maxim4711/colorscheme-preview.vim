@@ -1,7 +1,7 @@
 " ============================================================================
 " File: autoload/colorscheme_preview.vim
 " Description: Main functionality for colorscheme preview plugin
-" Author: Your Name <your.email@example.com>
+" Author: Maxim4711 <mdemenko@gmail.com>>
 " Version: 1.0
 " License: MIT
 " ============================================================================

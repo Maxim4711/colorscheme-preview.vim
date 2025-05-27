@@ -1,7 +1,7 @@
 " ============================================================================
 " File: plugin/colorscheme-preview.vim
 " Description: Interactive colorscheme preview and persistence plugin loader
-" Author: Your Name <your.email@example.com>
+" Author: Maxim4711 <mdemenko@gmail.com>
 " Version: 1.0
 " License: MIT
 " ============================================================================
