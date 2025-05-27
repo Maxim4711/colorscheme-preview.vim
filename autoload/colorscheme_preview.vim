@@ -29,7 +29,7 @@ let s:builtin_schemes = [
 " Get configuration directory
 function! s:GetConfigDir()
     if !empty(g:colorscheme_preview_state_dir)
-        return g:colorscheme_preview_state_dir
+        return expand(g:colorscheme_preview_state_dir)
     endif
     return has('nvim') ? stdpath('config') : expand('~/.vim')
 endfunction
