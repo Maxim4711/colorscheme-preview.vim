@@ -2,8 +2,6 @@
 
 Interactive colorscheme preview and persistence for Vim/Neovim with advanced filtering capabilities.
 
-![Demo](https://via.placeholder.com/600x400/1e1e1e/ffffff?text=Colorscheme+Preview+Demo)
-
 ## ✨ Features
 
 - 🎨 **Interactive preview** with real-time colorscheme switching
