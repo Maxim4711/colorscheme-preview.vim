@@ -1,0 +1,264 @@
+*colorscheme-preview.txt*	Interactive colorscheme preview and persistence
+
+Author:  Maxim4711 <mdemenko@gmail.com>
+License: MIT (see |colorscheme-preview-license|)
+
+INTRODUCTION				*colorscheme-preview* *colorscheme-preview.vim*
+
+This plugin provides an interactive colorscheme preview with real-time
+switching and automatic persistence. It allows you to browse through available
+colorschemes, see them applied immediately, and automatically saves your
+choice for future Vim sessions.
+
+Features:~
+    • Interactive preview with real-time colorscheme switching
+    • Automatic persistence between Vim sessions
+    • Filtering system to show/hide built-in colorschemes
+    • Include/exclude lists for fine-grained control
+    • Popup interface (Vim 8.2+) with fallback window interface
+    • Configurable key mappings
+
+==============================================================================
+REQUIREMENTS				*colorscheme-preview-requirements*
+
+Minimum requirements:~
+    • Vim 7.0+ (basic functionality)
+    • Vim 8.2+ (for popup interface)
+    • Neovim (fully supported)
+
+==============================================================================
+INSTALLATION				*colorscheme-preview-installation*
+
+Using vim-plug:~
+>
+    Plug 'yourusername/colorscheme-preview.vim'
+<
+
+Using Vundle:~
+>
+    Plugin 'yourusername/colorscheme-preview.vim'
+<
+
+Manual installation:~
+    1. Copy the plugin file to your plugin directory:
+       ~/.vim/plugin/colorscheme-preview.vim
+    2. Generate help tags: |:helptags|
+
+==============================================================================
+CONFIGURATION				*colorscheme-preview-configuration*
+
+						*g:colorscheme_preview_show_builtin*
+g:colorscheme_preview_show_builtin
+    Type: |Number|
+    Default: 1
+
+    Controls whether built-in Vim colorschemes are shown in the preview.
+    Set to 0 to show only user-installed colorschemes.
+>
+    let g:colorscheme_preview_show_builtin = 0
+<
+
+					*g:colorscheme_preview_exclude*
+g:colorscheme_preview_exclude
+    Type: |List|
+    Default: []
+
+    List of colorscheme names to exclude from the preview. Takes precedence
+    over the include list.
+>
+    let g:colorscheme_preview_exclude = ['desert', 'evening', 'morning']
+<
+
+					*g:colorscheme_preview_include*
+g:colorscheme_preview_include
+    Type: |List|
+    Default: []
+
+    List of colorscheme names to include in the preview. If this list is
+    not empty, only colorschemes in this list will be shown (unless they
+    are also in the exclude list).
+>
+    let g:colorscheme_preview_include = ['gruvbox', 'nord', 'onedark']
+<
+
+					*g:colorscheme_preview_key*
+g:colorscheme_preview_key
+    Type: |String|
+    Default: '<F9>'
+
+    Key mapping to open the colorscheme preview. Set to an empty string
+    to disable automatic key mapping.
+>
+    let g:colorscheme_preview_key = '<leader>cs'
+    let g:colorscheme_preview_key = ''  " Disable mapping
+<
+
+					*g:colorscheme_preview_state_dir*
+g:colorscheme_preview_state_dir
+    Type: |String|
+    Default: '' (auto-detected)
+
+    Directory where the colorscheme state file is saved. If empty, the
+    plugin will use ~/.vim for Vim or |stdpath|('config') for Neovim.
+>
+    let g:colorscheme_preview_state_dir = '~/.config/vim'
+<
+
+==============================================================================
+COMMANDS				*colorscheme-preview-commands*
+
+					*:ColorschemePreview*
+:ColorschemePreview
+    Open the interactive colorscheme preview. Uses popup interface if
+    available (Vim 8.2+), otherwise opens a preview window.
+
+					*:ColorschemePreviewSaveCurrent*
+:ColorschemePreviewSaveCurrent
+    Save the currently active colorscheme as the default for future
+    sessions.
+
+					*:ColorschemePreviewClearSaved*
+:ColorschemePreviewClearSaved
+    Clear the saved colorscheme state. The next Vim session will start
+    with the default colorscheme.
+
+					*:ColorschemePreviewConfig*
+:ColorschemePreviewConfig
+    Display the current plugin configuration, including filter settings
+    and the number of available colorschemes.
+
+==============================================================================
+USAGE					*colorscheme-preview-usage*
+
+Basic usage:~
+    1. Press |g:colorscheme_preview_key| (default <F9>) or run
+       |:ColorschemePreview|
+    2. Use j/k or arrow keys to navigate through colorschemes
+    3. Press <Enter> to select and save the colorscheme
+    4. Press q or <Esc> to cancel and restore the original colorscheme
+
+Navigation keys:~
+    j, <Down>		Move to next colorscheme
+    k, <Up>		Move to previous colorscheme
+    <Enter>		Select current colorscheme and save
+    q, <Esc>		Cancel and restore original colorscheme
+    r			Restore original colorscheme (temporary)
+
+The selected colorscheme is automatically saved and will be restored when
+you start Vim next time.
+
+==============================================================================
+EXAMPLES				*colorscheme-preview-examples*
+
+Show only user-installed colorschemes:~
+>
+    let g:colorscheme_preview_show_builtin = 0
+<
+
+Exclude specific colorschemes you don't like:~
+>
+    let g:colorscheme_preview_exclude = ['desert', 'evening', 'morning']
+<
+
+Create a curated list of your favorite colorschemes:~
+>
+    let g:colorscheme_preview_include = ['gruvbox', 'nord', 'onedark', 'dracula']
+<
+
+Use a different key mapping:~
+>
+    let g:colorscheme_preview_key = '<leader>c'
+<
+
+Complete configuration example:~
+>
+    " Only show user colorschemes, exclude some, use custom key
+    let g:colorscheme_preview_show_builtin = 0
+    let g:colorscheme_preview_exclude = ['blue', 'default']
+    let g:colorscheme_preview_key = '<leader>cs'
+<
+
+==============================================================================
+FILES					*colorscheme-preview-files*
+
+State file:~
+    The plugin saves the selected colorscheme in a state file:
+    • Vim: ~/.vim/colorscheme_state
+    • Neovim: {config}/colorscheme_state (where {config} is |stdpath|('config'))
+    • Custom: |g:colorscheme_preview_state_dir|/colorscheme_state
+
+    This file contains a single line with the name of the selected colorscheme.
+
+==============================================================================
+FUNCTIONS				*colorscheme-preview-functions*
+
+					*colorscheme_preview#Preview()*
+colorscheme_preview#Preview()
+    Main function to open the colorscheme preview interface.
+
+					*colorscheme_preview#SaveCurrent()*
+colorscheme_preview#SaveCurrent()
+    Save the currently active colorscheme to the state file.
+
+					*colorscheme_preview#ClearSaved()*
+colorscheme_preview#ClearSaved()
+    Remove the saved colorscheme state file.
+
+					*colorscheme_preview#ShowConfig()*
+colorscheme_preview#ShowConfig()
+    Display current configuration and statistics.
+
+==============================================================================
+TROUBLESHOOTING				*colorscheme-preview-troubleshooting*
+
+No colorschemes shown:~
+    • Check if colorschemes are installed in your 'runtimepath'
+    • Verify filter settings with |:ColorschemePreviewConfig|
+    • Try setting |g:colorscheme_preview_show_builtin| to 1
+
+Popup not working:~
+    • Popup interface requires Vim 8.2+
+    • The plugin will fallback to window interface automatically
+    • Check |has|('popupwin') to verify popup support
+
+Colorscheme not persisting:~
+    • Ensure the state directory is writable
+    • Check the state file location with |:ColorschemePreviewConfig|
+    • Remove any |:colorscheme| commands from your vimrc
+
+==============================================================================
+CHANGELOG				*colorscheme-preview-changelog*
+
+1.0    Initial release
+       • Interactive colorscheme preview
+       • Automatic persistence
+       • Filtering system
+       • Popup and window interfaces
+
+==============================================================================
+LICENSE					*colorscheme-preview-license*
+
+MIT License
+
+Copyright (c) 2025 Your Name
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:
